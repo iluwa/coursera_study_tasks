@@ -1,1 +1,1 @@
-# coursera_study_tasks
+# Some tasks from c++ study courses.
