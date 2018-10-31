@@ -2,45 +2,51 @@
 #include <map>
 using namespace std;
 
-struct FullName {
+/*struct FullName {
 	string first_name;
 	string last_name;
-};
+};*/
+
+int findNearestKey(const map<int, string>& m, int target) {
+	int nearest_key = 0;
+	for (auto rit = m.rbegin(); rit != m.rend(); ++rit) {
+		if (rit -> first <= target) {
+			nearest_key = rit -> first;
+			break;
+		}
+	}
+	return nearest_key;
+}
 
 class Person {
 public:
 	void ChangeFirstName(int year, const string& first_name) {
-		names[year] = {first_name, ""};
+		first_name_map[year] = first_name;
 	}
 	void ChangeLastName(int year, const string& last_name) {
-		names[year] = {"", last_name};
+		last_name_map[year] = last_name;
 	}
 	string GetFullName(int year) {
-		/*auto it = names.lower_bound(year);
-		if (it == names.end()) {
-			return "end";
-		}
-		if(it == names.begin()) {
-		    return "begin";
-		}
-		return "Year: ";*/
-		/*if (it == names.begin()) {
+		int first_name_key = findNearestKey(first_name_map, year);
+		int last_name_key = findNearestKey(last_name_map, year);
+		int first_name_count = first_name_map.count(first_name_key);
+		int last_name_count = last_name_map.count(last_name_key);
+		if (first_name_count == 0 && last_name_count == 0) {
 			return "Incognito";
 		} else {
-			if (it->second.last_name == "") {
-				return it->second.first_name + " with unknown last name";
-			} else if (it->second.first_name == "") {
-				return it->second.last_name + " with unknown firsrt name";
+			if (last_name_count == 0 && first_name_count > 0) {
+				return first_name_map[first_name_key] + " with unknown last name";
+			} else if (first_name_count == 0 && last_name_count > 0) {
+				return last_name_map[last_name_key] + " with unknown firsrt name";
 			} else {
-				return it->second.first_name + " " + it->second.last_name;
+				return first_name_map[first_name_key] + " " + last_name_map[last_name_key];
 			}
-		}*/
-		return "";
+		}
 	}
 private:
-	map<int, FullName> names;
+	map<int, string> last_name_map;
+	map<int, string> first_name_map;
 };
-
 
 int main() {
 	Person person;
