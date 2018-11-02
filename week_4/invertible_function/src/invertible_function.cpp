@@ -24,15 +24,23 @@ public:
 	double Apply(double initial_value) const {
 		if (operation == '+') {
 			return initial_value + value;
-		} else {
+		} else if (operation == '-') {
 			return initial_value - value;
+		} else if (operation == '*') {
+			return initial_value * value;
+		} else { // operation == '/'
+			return initial_value / value;
 		}
 	}
 	void Invert() {
 		if (operation == '+') {
 			operation = '-';
-		} else {
+		} else if (operation == '-') {
 			operation = '+';
+		} else if (operation == '*') {
+			operation = '/';
+		} else { // operation == '/'
+			operation = '*';
 		}
 	}
 private:
@@ -64,7 +72,8 @@ private:
 Function MakeWeightFunction(const Params& params,
                             const Image& image) {
 	Function function;
-	function.AddPart('-', image.freshness * params.a + params.b);
+	function.AddPart('*', params.a);
+	function.AddPart('-', image.freshness * params.b);
 	function.AddPart('+', image.rating * params.c);
 	return function;
 }
@@ -86,6 +95,6 @@ int main() {
 	Image image = {10, 2, 6};
 	Params params = {4, 2, 6};
 	cout << ComputeImageWeight(params, image) << endl;
-	cout << ComputeQualityByWeight(params, image, 46) << endl;
+	cout << ComputeQualityByWeight(params, image, 52) << endl;
 	return 0;
 }
