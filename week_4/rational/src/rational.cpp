@@ -4,6 +4,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <exception>
 using namespace std;
 
 int FindMaxDivisor(int n, int m) {
@@ -27,6 +28,10 @@ public:
 	}
 
 	Rational(int new_numerator, int new_denominator) {
+		if (new_denominator == 0) {
+			throw invalid_argument("invalid_argument");
+		}
+
 		if (new_numerator == 0) {
 			numerator = 0;
 			denominator = 1;
@@ -78,6 +83,9 @@ Rational operator*(const Rational& lhs, const Rational& rhs) {
 }
 
 Rational operator/(const Rational& lhs, const Rational& rhs) {
+	if (rhs.Numerator() == 0) {
+		throw domain_error("domain_error");
+	}
 	return lhs * Rational(rhs.Denominator(), rhs.Numerator());
 }
 
@@ -290,6 +298,20 @@ int main() {
 			cout << "Wrong amount of items in the map" << endl;
 			return 3;
 		}
+	}
+
+	try {
+		Rational r(1, 0);
+		cout << "Doesn't throw in case of zero denominator" << endl;
+		return 1;
+	} catch (invalid_argument&) {
+	}
+
+	try {
+		auto x = Rational(1, 2) / Rational(0, 1);
+		cout << "Doesn't throw in case of division by zero" << endl;
+		return 2;
+	} catch (domain_error&) {
 	}
 
 	cout << "OK" << endl;
